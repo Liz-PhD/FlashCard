@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Cloud Practitioner — Flashcards CLF-C02</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface2: #eef1f6;
+  --border: rgba(0,0,0,0.09);
+  --border2: rgba(0,0,0,0.16);
+  --text: #111827;
+  --text2: #4b5563;
+  --text3: #9ca3af;
+  --accent: #2563eb;
+  --accent2: #7c3aed;
+  --green: #059669;
+  --red: #dc2626;
+  --amber: #d97706;
+  --teal: #0891b2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* noise texture overlay */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0}
+
+.glow{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.05) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none;z-index:0}
+.glow2{position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.04) 0%,transparent 70%);bottom:-100px;left:-100px;pointer-events:none;z-index:0}
+
+.wrapper{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:20px 16px 40px}
+
+/* header */
+header{text-align:center;padding:32px 0 24px}
+.logo{display:inline-flex;align-items:center;gap:10px;background:var(--surface);border:1px solid rgba(0,0,0,0.2);border-radius:40px;padding:6px 18px 6px 10px;margin-bottom:20px}
+.logo-dot{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;font-family:'Syne',sans-serif}
+.logo-text{font-size:12px;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+h1{font-family:'Syne',sans-serif;font-size:clamp(26px,5vw,38px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
+h1 span{color:var(--accent)}
+.subtitle{font-size:14px;color:var(--text2);font-weight:300}
+
+/* filter bar */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:20px 0}
+.cat-btn{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;letter-spacing:.02em}
+.cat-btn:hover{border-color:var(--border2);color:var(--text)}
+.cat-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.stat-n{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;line-height:1}
+.stat-l{font-size:11px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.stat-n.green{color:var(--green)}
+.stat-n.red{color:var(--red)}
+
+/* progress */
+.prog-wrap{margin-bottom:20px}
+.prog-track{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#2563eb,#7c3aed);transition:width .4s ease}
+.prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:6px}
+
+/* card */
+.card-stage{perspective:1000px;margin-bottom:16px;cursor:pointer}
+.card-3d{position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);min-height:260px}
+.card-3d.flipped{transform:rotateY(180deg)}
+.card-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;min-height:260px}
+.card-front{background:var(--surface)}
+.card-back{background:var(--surface2);transform:rotateY(180deg);justify-content:flex-start;padding:24px 24px}
+.card-cat-badge{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:20px}
+.card-service-name{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,40px);font-weight:700;text-align:center;letter-spacing:-.02em;margin-bottom:8px;line-height:1.1}
+.card-tipo{font-size:13px;color:var(--text2);margin-bottom:20px}
+.card-tap-hint{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px;margin-top:auto}
+.tap-icon{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+
+/* back content */
+.back-section{width:100%;background:rgba(0,0,0,.04);border-radius:12px;padding:14px;margin-bottom:10px}
+.back-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);font-weight:600;margin-bottom:6px}
+.back-section-val{font-size:13px;color:var(--text);line-height:1.6}
+.back-tip{width:100%;border-left:2px solid var(--accent);padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.6;border-radius:0 8px 8px 0;background:rgba(37,99,235,.06)}
+.back-tip strong{color:var(--accent);font-weight:500}
+
+/* result buttons */
+.result-btns{display:flex;gap:10px;width:100%;justify-content:center;margin-top:16px}
+.rb{flex:1;max-width:180px;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;font-family:'DM Sans',sans-serif;border:1px solid transparent}
+.rb-ok{background:#d1fae5;color:#059669;border-color:#6ee7b7}
+.rb-ok:hover{background:#a7f3d0}
+.rb-fail{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+.rb-fail:hover{background:#fecaca}
+
+/* nav */
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:nowrap}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.nav-btn:hover:not(:disabled){background:var(--surface2);border-color:var(--border2);color:var(--text)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.nav-counter{font-size:13px;color:var(--text3);font-variant-numeric:tabular-nums}
+.shuffle-btn{background:none;border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text3);cursor:pointer;font-size:18px;transition:all .2s;display:flex;align-items:center;justify-content:center;min-width:44px;font-family:'DM Sans',sans-serif}
+.shuffle-btn:hover{border-color:var(--border2);color:var(--text2)}
+
+/* end screen */
+.end-screen{text-align:center;padding:40px 20px}
+.end-score{font-family:'Syne',sans-serif;font-size:72px;font-weight:700;line-height:1;margin:16px 0 4px}
+.end-label{font-size:14px;color:var(--text2);margin-bottom:24px}
+.end-msg{font-size:16px;color:var(--text);margin-bottom:32px;line-height:1.6}
+.restart-btn{background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;border-radius:12px;padding:14px 32px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;font-family:'Syne',sans-serif;letter-spacing:.02em;transition:opacity .2s}
+.restart-btn:hover{opacity:.85}
+
+/* category colors */
+.cat-computo{background:rgba(79,143,255,.12);color:#7db3ff;border-color:rgba(79,143,255,.3)}
+.cat-almacenamiento{background:rgba(29,233,160,.1);color:#5eecc0;border-color:rgba(29,233,160,.3)}
+.cat-bd{background:rgba(255,95,122,.1);color:#ff8fa3;border-color:rgba(255,95,122,.25)}
+.cat-redes{background:rgba(255,184,48,.1);color:#ffd080;border-color:rgba(255,184,48,.25)}
+.cat-seguridad{background:rgba(124,111,255,.12);color:#a89dff;border-color:rgba(124,111,255,.3)}
+.cat-monitoreo{background:rgba(0,212,200,.1);color:#40e0d8;border-color:rgba(0,212,200,.25)}
+.cat-costos{background:rgba(255,148,48,.1);color:#ffa060;border-color:rgba(255,148,48,.25)}
+.cat-gobernanza{background:rgba(208,132,255,.1);color:#d580ff;border-color:rgba(208,132,255,.25)}
+.cat-ia{background:rgba(29,233,160,.1);color:#5eecc0;border-color:rgba(29,233,160,.3)}
+
+@media(max-width:540px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .card-face{padding:20px 16px}
+  .card-service-name{font-size:24px}
+  .nav-row{gap:4px}
+  .nav-btn{padding:8px 10px;font-size:12px}
+  .rb{padding:8px 8px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="glow2"></div>
+<div class="wrapper">
+  <header>
+    <div class="logo">
+      <div class="logo-dot">AWS</div>
+      <span class="logo-text">Cloud Practitioner · CLF-C02</span>
+    </div>
+    <h1>Flashcards de <span>estudio</span></h1>
+    <p class="subtitle">50 servicios AWS · Toca cada tarjeta para voltearla</p>
+  </header>
+  <div id="app"></div>
+</div>
+
+<script>
+const CARDS = [
+  {cat:"Cómputo",cls:"cat-computo",service:"Amazon EC2",tipo:"Servidor virtual · IaaS",def:"Servidores virtuales en la nube. Puedes elegir sistema operativo, CPU, RAM y almacenamiento.",uso:"Alojar aplicaciones web, bases de datos, procesamiento por lotes, entornos de desarrollo.",tip:"EC2 = <strong>tú gestionas el SO</strong>. Si la pregunta dice 'servidor virtual' → EC2."},
+  {cat:"Cómputo",cls:"cat-computo",service:"AWS Lambda",tipo:"Función serverless · FaaS",def:"Ejecuta código en respuesta a eventos sin gestionar servidores. Pago por milisegundo de ejecución.",uso:"Procesamiento de eventos, backends de API, triggers de S3, automatización.",tip:"Lambda = <strong>sin servidores</strong>. Si dice 'serverless' o 'solo código' → Lambda."},
+  {cat:"Cómputo",cls:"cat-computo",service:"Elastic Beanstalk",tipo:"Plataforma administrada · PaaS",def:"Despliega y gestiona automáticamente aplicaciones web (Java, Python, Node, PHP, Ruby...).",uso:"Desplegar apps web rápidamente sin configurar infraestructura manualmente.",tip:"Beanstalk = <strong>sube tu código, AWS hace el resto</strong>. Si dice 'despliegue automático de app' → Beanstalk."},
+  {cat:"Cómputo",cls:"cat-computo",service:"EC2 Auto Scaling",tipo:"Escalado automático",def:"Añade o elimina instancias EC2 automáticamente según la demanda o políticas definidas.",uso:"Manejar picos de tráfico, garantizar disponibilidad mínima de instancias.",tip:"Si dice '<strong>escalar automáticamente instancias EC2</strong>' → Auto Scaling."},
+  {cat:"Cómputo",cls:"cat-computo",service:"Amazon ECS",tipo:"Contenedores administrados",def:"Servicio completamente administrado para ejecutar contenedores Docker en AWS.",uso:"Aplicaciones basadas en microservicios con contenedores.",tip:"ECS = contenedores administrados. <strong>Fargate</strong> = ECS sin gestionar servidores."},
+  {cat:"Cómputo",cls:"cat-computo",service:"Amazon WorkSpaces",tipo:"Escritorio virtual · DaaS",def:"Escritorios virtuales Windows/Linux en la nube, accesibles desde cualquier dispositivo.",uso:"Trabajo remoto seguro, BYOD, reemplazar VDI on-premises.",tip:"WorkSpaces = <strong>escritorio virtual</strong>. Si dice 'empleados remotos con escritorio' → WorkSpaces."},
+  {cat:"Almacenamiento",cls:"cat-almacenamiento",service:"Amazon S3",tipo:"Objetos · ilimitado",def:"Almacenamiento de objetos (archivos, imágenes, videos, backups) con durabilidad 99.999999999%.",uso:"Hosting estático, backups, data lakes, imágenes de aplicaciones web.",tip:"S3 = <strong>objetos ilimitados</strong>. Si dice 'almacenar archivos/imágenes a escala' → S3."},
+  {cat:"Almacenamiento",cls:"cat-almacenamiento",service:"Amazon EBS",tipo:"Bloques · disco virtual",def:"Almacenamiento en bloque de alta performance para instancias EC2. Como un disco duro virtual.",uso:"Volumen raíz de EC2, bases de datos que necesitan almacenamiento persistente.",tip:"EBS = <strong>disco duro de EC2</strong>. Solo se conecta a UNA instancia a la vez."},
+  {cat:"Almacenamiento",cls:"cat-almacenamiento",service:"Amazon EFS",tipo:"Archivos compartidos · NFS",def:"Sistema de archivos NFS administrado que puede montarse en múltiples instancias EC2 simultáneamente.",uso:"Contenido compartido entre instancias, CMS, pipelines de ML.",tip:"EFS = <strong>carpeta compartida entre múltiples EC2</strong>. EBS solo conecta a una."},
+  {cat:"Almacenamiento",cls:"cat-almacenamiento",service:"S3 Glacier",tipo:"Archivo frío · bajo costo",def:"Almacenamiento de muy bajo costo para datos raramente accedidos. Recuperación en horas.",uso:"Archivos históricos, cumplimiento regulatorio, backups a largo plazo.",tip:"Glacier = <strong>muy barato, acceso lento</strong>. Si dice 'archivar datos raramente usados' → Glacier."},
+  {cat:"Almacenamiento",cls:"cat-almacenamiento",service:"AWS Snowball Edge",tipo:"Migración física de datos",def:"Dispositivo físico resistente para transferir grandes volúmenes de datos (hasta 80 TB) a AWS sin internet.",uso:"Migrar 60–80 TB cuando la conexión a internet es lenta o insuficiente.",tip:"Snowball = <strong>camión de datos físico</strong>. Si dice 'TB sin red rápida' → Snowball Edge."},
+  {cat:"Bases de datos",cls:"cat-bd",service:"Amazon RDS",tipo:"Relacional administrado · SQL",def:"Servicio administrado para bases de datos relacionales: MySQL, PostgreSQL, Oracle, SQL Server, MariaDB.",uso:"Apps que necesitan SQL: e-commerce, ERP, CRM.",tip:"RDS = <strong>SQL administrado</strong>. AWS parchea, hace backups y gestiona HA automáticamente."},
+  {cat:"Bases de datos",cls:"cat-bd",service:"Amazon Aurora",tipo:"Relacional · alto rendimiento",def:"BD relacional compatible con MySQL y PostgreSQL, hasta 5x más rápida. 100% administrada por AWS.",uso:"Apps de alto rendimiento y disponibilidad que usan SQL.",tip:"Aurora = <strong>RDS potenciado</strong>. Compatible MySQL/PostgreSQL pero más rápido y resiliente."},
+  {cat:"Bases de datos",cls:"cat-bd",service:"Amazon DynamoDB",tipo:"NoSQL · serverless",def:"Base de datos NoSQL de clave-valor y documentos, totalmente administrada, latencia de milisegundos.",uso:"Apps móviles, gaming, IoT, catálogos de productos con millones de registros.",tip:"DynamoDB = <strong>NoSQL serverless</strong>. Si dice 'clave-valor' o 'escala a millones' → DynamoDB."},
+  {cat:"Bases de datos",cls:"cat-bd",service:"Amazon Redshift",tipo:"Data Warehouse · analytics",def:"Data warehouse columnar en la nube para analizar petabytes de datos con SQL.",uso:"Business Intelligence, reportes empresariales, análisis de grandes volúmenes.",tip:"Redshift = <strong>análisis y BI</strong>. Si dice 'data warehouse' o 'analizar petabytes' → Redshift."},
+  {cat:"Bases de datos",cls:"cat-bd",service:"Amazon ElastiCache",tipo:"Caché en memoria · in-memory",def:"Caché en memoria administrado compatible con Redis y Memcached. Respuestas en microsegundos.",uso:"Acelerar apps web, sesiones de usuario, caché de resultados de BD.",tip:"ElastiCache = <strong>caché en RAM</strong>. Si dice 'in-memory' o 'reducir latencia de BD' → ElastiCache."},
+  {cat:"Redes",cls:"cat-redes",service:"Amazon VPC",tipo:"Red privada virtual",def:"Red virtual privada en la nube donde controlas subnets, tablas de rutas, firewalls y conectividad.",uso:"Aislar recursos de AWS en una red privada, arquitectura de 3 capas.",tip:"VPC = <strong>tu red privada en AWS</strong>. Todo recurso AWS se lanza dentro de una VPC."},
+  {cat:"Redes",cls:"cat-redes",service:"Amazon Route 53",tipo:"DNS · failover automático",def:"Servicio DNS escalable con health checks, failover automático y políticas de enrutamiento.",uso:"Gestionar dominios, redirigir tráfico si un servidor falla, latency routing.",tip:"Route 53 = <strong>DNS + failover</strong>. Si dice 'redirigir automáticamente si falla' → Route 53."},
+  {cat:"Redes",cls:"cat-redes",service:"Amazon CloudFront",tipo:"CDN · entrega global",def:"Red de distribución de contenido (CDN) que entrega datos desde edge locations cercanas al usuario.",uso:"Acelerar sitios web, distribuir videos, reducir latencia global.",tip:"CloudFront = <strong>CDN</strong>. Si dice 'entregar contenido rápido globalmente' → CloudFront."},
+  {cat:"Redes",cls:"cat-redes",service:"Elastic Load Balancing",tipo:"Balanceo de carga",def:"Distribuye el tráfico entrante entre múltiples instancias EC2 para alta disponibilidad.",uso:"Distribuir carga entre servidores, eliminar puntos únicos de fallo.",tip:"ELB = <strong>repartidor de tráfico</strong>. Trabaja en conjunto con Auto Scaling."},
+  {cat:"Redes",cls:"cat-redes",service:"AWS VPN",tipo:"Túnel cifrado · site-to-site",def:"Túnel cifrado IPSec sobre internet entre la red on-premises y la VPC de AWS.",uso:"Conectar oficina corporativa a AWS de forma segura.",tip:"VPN = <strong>túnel cifrado por internet</strong>. Direct Connect = línea dedicada (no cifrada por defecto)."},
+  {cat:"Redes",cls:"cat-redes",service:"AWS Client VPN",tipo:"Acceso remoto · usuarios",def:"VPN administrada que permite a usuarios individuales conectarse a AWS o la red corporativa.",uso:"Empleados remotos accediendo a recursos internos de forma segura.",tip:"Client VPN = <strong>empleados remotos</strong>. Site-to-Site VPN = conectar oficina completa a AWS."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"AWS IAM",tipo:"Identidad y acceso",def:"Gestiona quién puede hacer qué en AWS: usuarios, grupos, roles y políticas de permisos.",uso:"Controlar acceso a servicios AWS, crear roles para EC2, aplicar mínimo privilegio.",tip:"IAM = <strong>control de acceso</strong>. Recuerda: usuarios, grupos (sin anidar), roles (para servicios)."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"AWS Shield",tipo:"Protección DDoS",def:"Protección administrada contra ataques DDoS. Standard es gratuito; Advanced ofrece protección avanzada.",uso:"Proteger apps web y APIs contra ataques volumétricos de denegación de servicio.",tip:"Shield = <strong>anti-DDoS</strong>. Standard es automático y gratis para todos los clientes AWS."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"AWS WAF",tipo:"Firewall de aplicaciones web",def:"Firewall que filtra tráfico HTTP malicioso: SQL injection, Cross-Site Scripting (XSS), bots.",uso:"Proteger aplicaciones web y APIs contra ataques a nivel de capa 7.",tip:"WAF = <strong>protección SQL/XSS</strong>. Security Groups protegen puertos; WAF protege contra ataques web."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"Amazon GuardDuty",tipo:"Detección de amenazas · ML",def:"Detecta amenazas analizando logs de CloudTrail, VPC Flow y DNS con machine learning.",uso:"Detectar comportamientos anómalos, cuentas comprometidas, actividad maliciosa.",tip:"GuardDuty = <strong>detective de amenazas</strong>. Solo detecta y alerta, no bloquea."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"Amazon Inspector",tipo:"Escaneo de vulnerabilidades",def:"Escanea automáticamente instancias EC2 y contenedores en busca de vulnerabilidades de software.",uso:"Evaluar seguridad de instancias, verificar cumplimiento de parches.",tip:"Inspector = <strong>escáner de vulnerabilidades EC2</strong>. GuardDuty detecta amenazas en tiempo real."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"AWS KMS",tipo:"Gestión de claves · cifrado",def:"Servicio administrado de gestión de claves de cifrado. Integrado con la mayoría de servicios AWS.",uso:"Cifrar datos en S3, EBS, RDS, DynamoDB. Gestionar claves de forma centralizada.",tip:"KMS = <strong>gestor de claves de cifrado</strong>. Si dice 'cifrar datos en reposo' → KMS."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"AWS Secrets Manager",tipo:"Gestión de secretos",def:"Almacena y rota automáticamente credenciales de bases de datos, claves API y otros secretos.",uso:"Guardar contraseñas de RDS y rotarlas sin cambiar el código de la aplicación.",tip:"Secrets Manager = <strong>guardar contraseñas con rotación automática</strong>."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"Amazon Macie",tipo:"Detección de datos sensibles",def:"Usa machine learning para descubrir y proteger datos sensibles (PII, datos financieros) en S3.",uso:"Detectar números de tarjetas, pasaportes, datos personales en buckets S3.",tip:"Macie = <strong>detective de PII en S3</strong>. Si dice 'información sensible en S3' → Macie."},
+  {cat:"Seguridad",cls:"cat-seguridad",service:"AWS Organizations",tipo:"Multi-cuenta · gobernanza",def:"Agrupa múltiples cuentas AWS con facturación consolidada y Service Control Policies (SCPs).",uso:"Gestionar entornos multi-cuenta: dev, staging, producción en cuentas separadas.",tip:"Organizations = <strong>múltiples cuentas + facturación consolidada</strong>."},
+  {cat:"Monitoreo",cls:"cat-monitoreo",service:"Amazon CloudWatch",tipo:"Métricas · alarmas · logs",def:"Monitoreo de métricas, logs y alarmas para recursos AWS (CPU, red, disco, métricas personalizadas).",uso:"Alarmas de CPU al 80%, dashboards de rendimiento, detectar errores en logs.",tip:"CloudWatch = <strong>MÉTRICAS y alarmas</strong>. CloudWatch mide → CloudTrail registra quién hizo qué."},
+  {cat:"Monitoreo",cls:"cat-monitoreo",service:"AWS CloudTrail",tipo:"Auditoría · API logging",def:"Registra todas las llamadas a la API y actividades en la consola AWS: quién, qué, cuándo y desde dónde.",uso:"Auditoría de seguridad, investigar cambios no autorizados, cumplimiento regulatorio.",tip:"CloudTrail = <strong>AUDITORÍA</strong>. Si dice '¿quién borró el bucket?' o 'actividad API' → CloudTrail."},
+  {cat:"Monitoreo",cls:"cat-monitoreo",service:"AWS Config",tipo:"Historial de configuración",def:"Rastrea cambios en la configuración de recursos AWS y evalúa cumplimiento contra reglas definidas.",uso:"Historial de configuraciones, detectar recursos no conformes, auditoría de cambios.",tip:"Config = <strong>HISTORIAL de configuración</strong>. CloudTrail = quién lo hizo. Config = cómo quedó."},
+  {cat:"Monitoreo",cls:"cat-monitoreo",service:"AWS Trusted Advisor",tipo:"Recomendaciones automáticas",def:"Analiza el entorno y da recomendaciones en 5 áreas: costos, rendimiento, seguridad, tolerancia a fallos y límites de servicio.",uso:"Identificar recursos sobredimensionados, puertos abiertos, límites de servicio.",tip:"Trusted Advisor = <strong>consultor automático de AWS</strong>. Revisa tu cuenta y da recomendaciones."},
+  {cat:"Monitoreo",cls:"cat-monitoreo",service:"AWS Health Dashboard",tipo:"Estado de servicios AWS",def:"Muestra el estado actual de los servicios AWS y alertas de eventos que afectan tu cuenta.",uso:"Ver si hay interrupciones en AWS que afecten tus recursos.",tip:"Health Dashboard = <strong>estado de servicios AWS</strong>. Trusted Advisor = recomendaciones de optimización."},
+  {cat:"Costos",cls:"cat-costos",service:"AWS Pricing Calculator",tipo:"Estimación de costos",def:"Herramienta web para estimar el costo de servicios AWS ANTES de implementarlos.",uso:"Planificar presupuesto, comparar opciones de arquitectura por costo.",tip:"Pricing Calculator = <strong>estimar costos FUTUROS</strong>. Cost Explorer = analizar costos PASADOS."},
+  {cat:"Costos",cls:"cat-costos",service:"AWS Cost Explorer",tipo:"Análisis de costos históricos",def:"Visualiza y analiza costos y uso de AWS histórico mediante gráficos interactivos y filtros.",uso:"Identificar qué servicio o región consume más presupuesto, ver tendencias de gasto.",tip:"Cost Explorer = <strong>analizar costos PASADOS</strong> con gráficos. Para presupuestos futuros → Pricing Calculator."},
+  {cat:"Costos",cls:"cat-costos",service:"AWS Budgets",tipo:"Alertas de gasto",def:"Define presupuestos de costo o uso y envía alertas cuando se acercan o superan los umbrales.",uso:"Recibir alerta si el gasto mensual supera $500, controlar costos del equipo.",tip:"Budgets = <strong>alertas de gasto</strong>. Si dice 'notificar cuando supere el presupuesto' → Budgets."},
+  {cat:"Costos",cls:"cat-costos",service:"Cost and Usage Report",tipo:"Reportes detallados · CUR",def:"Genera reportes detallados de uso y costo a nivel de recurso individual, exportables a S3.",uso:"Análisis avanzado de costos, integración con herramientas de BI como Athena o Redshift.",tip:"CUR = <strong>reporte MÁS detallado</strong> de costos, a nivel de recurso individual."},
+  {cat:"Costos",cls:"cat-costos",service:"Reserved Instances",tipo:"Modelo de precio · descuento",def:"Compromiso de 1 o 3 años a cambio de descuentos de hasta 72% sobre el precio On-Demand.",uso:"Cargas de trabajo predecibles y constantes: bases de datos, servidores de producción.",tip:"Reserved = <strong>descuento por compromiso</strong>. On-Demand = flexible sin descuento. Spot = más barato, interrumpible."},
+  {cat:"Costos",cls:"cat-costos",service:"EC2 Spot Instances",tipo:"Capacidad sobrante · 90% descuento",def:"Capacidad EC2 sobrante con descuentos de hasta 90%. AWS puede interrumpirlas con 2 min de aviso.",uso:"Procesamiento por lotes, análisis de datos, cargas tolerantes a interrupciones.",tip:"Spot = <strong>el más barato pero puede interrumpirse</strong>. Nunca para cargas críticas."},
+  {cat:"Gobernanza",cls:"cat-gobernanza",service:"AWS Control Tower",tipo:"Gobernanza multi-cuenta",def:"Automatiza la configuración de entornos multi-cuenta con mejores prácticas y guardrails integrados.",uso:"Crear un landing zone con políticas de seguridad preconfiguradas para múltiples cuentas.",tip:"Control Tower = <strong>gobernanza multi-cuenta automatizada</strong>. Organizations = solo agrupa y factura."},
+  {cat:"Gobernanza",cls:"cat-gobernanza",service:"AWS Artifact",tipo:"Documentos de cumplimiento",def:"Repositorio de informes de cumplimiento y acuerdos legales de AWS (ISO, SOC, PCI DSS, HIPAA).",uso:"Descargar reportes de auditoría para demostrar cumplimiento a reguladores.",tip:"Artifact = <strong>documentos de compliance</strong>. Si dice 'reporte de auditoría de AWS' → Artifact."},
+  {cat:"Gobernanza",cls:"cat-gobernanza",service:"AWS DMS",tipo:"Migración de bases de datos",def:"Database Migration Service: migra bases de datos a AWS con mínimo tiempo de inactividad.",uso:"Migrar Oracle a Aurora, SQL Server a RDS, migraciones homogéneas y heterogéneas.",tip:"DMS = <strong>migrar bases de datos</strong>. Application Migration Service = migrar servidores completos."},
+  {cat:"Gobernanza",cls:"cat-gobernanza",service:"AWS Outposts",tipo:"AWS en tu datacenter · híbrido",def:"Lleva hardware y servicios de AWS directamente al datacenter del cliente para ejecución local.",uso:"Apps que requieren baja latencia extrema o que no pueden salir de instalaciones locales.",tip:"Outposts = <strong>AWS en tu propio datacenter</strong>. Si dice 'on-premises con servicios AWS' → Outposts."},
+  {cat:"IA / ML",cls:"cat-ia",service:"Amazon Rekognition",tipo:"Visión artificial · imágenes",def:"Detecta objetos, personas, texto, escenas y contenido inapropiado en imágenes y videos con IA.",uso:"Verificación facial, moderación de contenido, análisis de video de seguridad.",tip:"Rekognition = <strong>ver e identificar en imágenes/videos</strong>. Si dice 'detectar objetos en imágenes' → Rekognition."},
+  {cat:"IA / ML",cls:"cat-ia",service:"Amazon Lex",tipo:"Chatbots · NLP conversacional",def:"Crea chatbots conversacionales con reconocimiento de voz e intención (tecnología de Alexa).",uso:"Asistentes virtuales, bots de atención al cliente, automatización de llamadas.",tip:"Lex = <strong>chatbots y asistentes de voz</strong>. Si dice 'bot conversacional' o 'NLP' → Lex."},
+  {cat:"IA / ML",cls:"cat-ia",service:"Amazon Polly",tipo:"Texto a voz · TTS",def:"Convierte texto en voz natural en múltiples idiomas y voces usando deep learning.",uso:"Generación de audiolibros, accesibilidad, respuestas de voz en aplicaciones.",tip:"Polly = <strong>texto → voz</strong>. Transcribe = voz → texto. Son servicios opuestos."},
+  {cat:"IA / ML",cls:"cat-ia",service:"Amazon Transcribe",tipo:"Voz a texto · STT",def:"Transcripción automática de audio a texto con soporte multilingüe y detección de hablantes.",uso:"Subtitulado automático, transcripción de reuniones, análisis de llamadas de soporte.",tip:"Transcribe = <strong>voz → texto</strong>. Polly = texto → voz. Translate = traducción de idiomas."},
+  {cat:"IA / ML",cls:"cat-ia",service:"Amazon Translate",tipo:"Traducción automática · NMT",def:"Traducción automática de texto entre idiomas usando redes neuronales profundas.",uso:"Localización de contenido, traducción de documentos, aplicaciones multilingüe.",tip:"Translate = <strong>traducción de idiomas</strong>. No confundir con Transcribe (voz a texto)."},
+];
+
+const CATS = ["Todas",...[...new Set(CARDS.map(c=>c.cat))]];
+let filtered=[...CARDS], idx=0, flipped=false, known=0, unknown=0, currentCat="Todas";
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
+
+function pct(){return filtered.length>0?Math.round((idx/filtered.length)*100):0;}
+
+function render(){
+  const app=document.getElementById('app');
+  if(idx>=filtered.length&&filtered.length>0){renderEnd();return;}
+  const card=filtered[idx];
+  app.innerHTML=`
+    <div class="filter-bar">${CATS.map(c=>`<button class="cat-btn ${c===currentCat?'active':''}" onclick="filterCat('${c}')">${c}</button>`).join('')}</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">${idx+1}/${filtered.length}</div><div class="stat-l">Tarjeta</div></div>
+      <div class="stat"><div class="stat-n green">${known}</div><div class="stat-l">Lo sé</div></div>
+      <div class="stat"><div class="stat-n red">${unknown}</div><div class="stat-l">Repasar</div></div>
+      <div class="stat"><div class="stat-n">${filtered.length-known-unknown}</div><div class="stat-l">Pendientes</div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-track"><div class="prog-fill" style="width:${pct()}%"></div></div>
+      <div class="prog-label"><span>Progreso</span><span>${pct()}%</span></div>
+    </div>
+    <div class="card-stage" onclick="flipCard()">
+      <div class="card-3d ${flipped?'flipped':''}" id="card3d">
+        <div class="card-face card-front">
+          <span class="card-cat-badge ${card.cls}">${card.cat}</span>
+          <div class="card-service-name">${card.service}</div>
+          <div class="card-tipo">${card.tipo}</div>
+          ${!flipped?`<div class="card-tap-hint"><div class="tap-icon">↩</div> Toca para voltear</div>`:''}
+        </div>
+        <div class="card-face card-back" style="overflow-y:auto">
+          <span class="card-cat-badge ${card.cls}" style="margin-bottom:16px">${card.service}</span>
+          <div class="back-section"><div class="back-section-label">¿Qué es?</div><div class="back-section-val">${card.def}</div></div>
+          <div class="back-section"><div class="back-section-label">Casos de uso</div><div class="back-section-val">${card.uso}</div></div>
+          <div class="back-tip">💡 ${card.tip}</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn" onclick="prev()" ${idx===0?'disabled':''}>← Anterior</button>
+      <button class="rb rb-ok" style="max-width:none;flex:1" onclick="event.stopPropagation();mark(true)">✓ Lo sé</button>
+      <button class="shuffle-btn" onclick="doShuffle()">⇄</button>
+      <button class="rb rb-fail" style="max-width:none;flex:1" onclick="event.stopPropagation();mark(false)">↩ Repasar</button>
+      <button class="nav-btn" onclick="next()" ${idx===filtered.length-1?'disabled':''}>Siguiente →</button>
+    </div>`;
+}
+
+function renderEnd(){
+  const score=Math.round((known/filtered.length)*100);
+  const msg=score>=80?'¡Excelente dominio! Estás listo para el examen.':score>=60?'Buen avance. Repasa las tarjetas marcadas y vuelve a intentarlo.':'Sigue practicando. Enfócate en las categorías más débiles.';
+  document.getElementById('app').innerHTML=`
+    <div class="end-screen">
+      <div class="card-cat-badge cat-computo" style="display:inline-flex;margin-bottom:16px">${currentCat}</div>
+      <div class="end-score" style="color:${score>=80?'var(--green)':score>=60?'var(--amber)':'var(--red)'}">${score}%</div>
+      <div class="end-label">${known} de ${filtered.length} tarjetas dominadas</div>
+      <div class="end-msg">${msg}</div>
+      <button class="restart-btn" onclick="restart()">Repetir mazo</button>
+    </div>`;
+}
+
+function filterCat(cat){currentCat=cat;filtered=cat==="Todas"?[...CARDS]:CARDS.filter(c=>c.cat===cat);idx=0;flipped=false;known=0;unknown=0;render();}
+function flipCard(){if(!flipped){flipped=true;render();}}
+function mark(ok){if(ok)known++;else unknown++;idx++;flipped=false;render();}
+function prev(){if(idx>0){idx--;flipped=false;render();}}
+function next(){if(idx<filtered.length-1){idx++;flipped=false;render();}}
+function doShuffle(){shuffle(filtered);idx=0;flipped=false;known=0;unknown=0;render();}
+function restart(){idx=0;flipped=false;known=0;unknown=0;render();}
+
+render();
+</script>
+</body>
+</html>
