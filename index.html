@@ -3,248 +3,315 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutoría INFOTEC — Flashcards CLF-C02</title>
+<title>Tutoría INFOTEC — AWS Cloud Practitioner CLF-C02</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f5f7fa;
-  --surface: #ffffff;
-  --surface2: #eef1f6;
-  --border: rgba(0,0,0,0.09);
-  --border2: rgba(0,0,0,0.16);
-  --text: #111827;
-  --text2: #4b5563;
-  --text3: #9ca3af;
-  --accent: #2563eb;
-  --accent2: #7c3aed;
-  --green: #059669;
-  --red: #dc2626;
+:root{
+  --bg:#f5f7fa;
+  --surface:#ffffff;
+  --surface2:#eef1f6;
+  --border:rgba(0,0,0,0.09);
+  --border2:rgba(0,0,0,0.16);
+  --text:#111827;
+  --text2:#4b5563;
+  --text3:#9ca3af;
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --green:#059669;
+  --green-bg:#d1fae5;
+  --green-border:#6ee7b7;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+.wrapper{max-width:760px;margin:0 auto;padding:32px 16px 64px}
 
-.wrapper{max-width:720px;margin:0 auto;padding:28px 16px 48px}
+header{padding:24px 0 28px}
+.tag{display:inline-block;background:var(--surface);border:1px solid var(--border2);border-radius:30px;padding:6px 20px;font-size:12px;font-weight:500;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+h1{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.025em;line-height:1.1;margin-bottom:6px}
+.site-sub{font-size:14px;color:var(--text2);margin-bottom:3px}
+.autor{font-size:13px;color:var(--text3);font-style:italic;margin-top:2px}
+.autor strong{font-style:normal;color:var(--text2);font-weight:500}
 
-/* header */
-header{text-align:center;padding:24px 0 28px}
-.tag{display:inline-block;background:var(--surface);border:1px solid var(--border2);border-radius:30px;padding:7px 22px;font-size:12px;font-weight:500;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px}
-h1{font-family:'Syne',sans-serif;font-size:clamp(30px,6vw,44px);font-weight:700;letter-spacing:-.025em;line-height:1.1;margin-bottom:10px}
-h1 span{color:var(--accent)}
-.autor{font-size:13px;color:var(--text3);font-style:italic;margin-top:4px;line-height:1.5}
-.autor strong{color:var(--text2);font-style:normal;font-weight:500}
-.hint{font-size:13px;color:var(--text3);margin-top:10px}
+.divider{height:0.5px;background:var(--border);margin:22px 0}
 
-/* progress */
-.prog-wrap{margin-bottom:22px}
-.prog-header{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:6px}
-.prog-track{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;border:1px solid var(--border)}
-.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease}
+/* Tarjeta de acción destacada (asistencia, dominios) */
+.action-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:16px 18px;text-decoration:none;margin-bottom:10px;transition:all .2s}
+.action-card:hover{border-color:var(--accent);background:#f0f5ff}
+.action-card.green-card{border-color:rgba(5,150,105,.25)}
+.action-card.green-card:hover{border-color:var(--green);background:#f0fdf7}
+.action-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.icon-blue{background:#dbeafe;color:#1d4ed8}
+.icon-green{background:#d1fae5;color:#065f46}
+.icon-purple{background:#ede9fe;color:#5b21b6}
+.action-content{flex:1}
+.action-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.action-desc{font-size:13px;color:var(--text2)}
+.action-arrow{font-size:20px;color:var(--text3)}
 
-/* card */
-.card-stage{perspective:1200px;margin-bottom:20px;cursor:pointer;min-height:380px}
-.card-3d{position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);min-height:380px}
-.card-3d.flipped{transform:rotateY(180deg)}
-.card-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;min-height:380px}
-.card-front{background:var(--surface);box-shadow:0 2px 20px rgba(0,0,0,.06)}
-.card-back{background:var(--surface);box-shadow:0 2px 20px rgba(0,0,0,.06);transform:rotateY(180deg);justify-content:flex-start;padding:32px 32px;overflow-y:auto}
-.card-cat-badge{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 16px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:24px;background:#dbeafe;color:#1d4ed8;border:1px solid #93c5fd}
-.card-service-name{font-family:'Syne',sans-serif;font-size:clamp(30px,5vw,42px);font-weight:700;text-align:center;letter-spacing:-.025em;margin-bottom:8px;line-height:1.15;color:var(--text)}
-.card-tipo{font-size:14px;color:var(--text2);margin-bottom:28px;text-align:center}
-.card-tap-hint{font-size:13px;color:var(--text3);display:flex;align-items:center;gap:8px;margin-top:8px}
-.tap-icon{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+/* Sección de sesión */
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.section-badge{font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.badge-active{background:#dbeafe;color:#1d4ed8;border:1px solid #93c5fd}
+.badge-next{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.badge-soon{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.badge-recurso{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.section-title{font-size:16px;font-weight:500;color:var(--text);flex:1}
+.section-date{font-size:12px;color:var(--text3)}
 
-/* back content */
-.back-section{width:100%;background:var(--surface2);border-radius:14px;padding:16px 18px;margin-bottom:12px;border:1px solid var(--border)}
-.back-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);font-weight:600;margin-bottom:6px}
-.back-section-val{font-size:14px;color:var(--text);line-height:1.65}
-.back-tip{width:100%;border-left:3px solid var(--accent);padding:12px 16px;font-size:13px;color:var(--text2);line-height:1.65;border-radius:0 10px 10px 0;background:#eff6ff;margin-top:4px}
-.back-tip strong{color:var(--accent);font-weight:600}
-.back-service-label{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);width:100%;text-align:center}
+/* Grid de materiales */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:6px}
+.mat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;text-decoration:none;transition:all .2s}
+.mat-card:hover:not(.disabled){border-color:var(--accent);box-shadow:0 2px 12px rgba(37,99,235,.08)}
+.mat-card.disabled{opacity:.42;pointer-events:none}
+.mat-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.mi-blue{background:#dbeafe;color:#1d4ed8}
+.mi-green{background:#d1fae5;color:#065f46}
+.mi-amber{background:#fef3c7;color:#92400e}
+.mi-purple{background:#ede9fe;color:#5b21b6}
+.mi-gray{background:var(--surface2);color:var(--text3)}
+.mat-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.mat-name{font-size:14px;font-weight:500;color:var(--text);line-height:1.3}
+.mat-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.mat-status{display:flex;align-items:center;gap:6px;font-size:12px;margin-top:auto;padding-top:6px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-live{background:#10b981}
+.dot-soon{background:#d1d5db}
+.status-txt{color:var(--text3)}
 
-/* nav */
-.nav-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.nav-btn{background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;padding:13px 28px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;font-family:'DM Sans',sans-serif;flex:1;justify-content:center}
-.nav-btn:hover:not(:disabled){background:var(--surface2);color:var(--text);border-color:var(--accent)}
-.nav-btn:disabled{opacity:.3;cursor:default}
-.nav-counter{font-size:13px;color:var(--text3);white-space:nowrap;text-align:center;min-width:60px}
-
-/* end */
-.end-screen{text-align:center;padding:48px 20px;background:var(--surface);border-radius:24px;border:1px solid var(--border)}
-.end-score{font-family:'Syne',sans-serif;font-size:80px;font-weight:700;line-height:1;margin:12px 0 4px;color:var(--accent)}
-.end-label{font-size:15px;color:var(--text2);margin-bottom:12px}
-.end-msg{font-size:15px;color:var(--text);margin-bottom:32px;line-height:1.7;max-width:400px;margin-left:auto;margin-right:auto}
-.restart-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;padding:14px 36px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;font-family:'Syne',sans-serif;letter-spacing:.02em;transition:opacity .2s}
-.restart-btn:hover{opacity:.88}
-
-@media(max-width:500px){
-  .card-face{padding:28px 20px;min-height:340px}
-  .card-stage{min-height:340px}
-  .card-3d{min-height:340px}
-  .card-service-name{font-size:26px}
-  .nav-btn{padding:12px 18px;font-size:13px}
-}
+footer{text-align:center;margin-top:36px;font-size:12px;color:var(--text3)}
 </style>
 </head>
 <body>
 <div class="wrapper">
+
   <header>
     <div class="tag">Cloud Practitioner &nbsp;·&nbsp; CLF-C02</div>
-    <h1>Tutoría <span>INFOTEC</span></h1>
-    <p class="autor">Material elaborado por la tutora:<br><strong>Iliana Lizbeth Alvarado Lara</strong></p>
-    <p class="hint">Toca cada tarjeta para voltearla</p>
+    <h1>Tutoría INFOTEC</h1>
+    <p class="site-sub">AWS Certified Cloud Practitioner</p>
+    <p class="autor">Material elaborado por la tutora: <strong>Iliana Lizbeth Alvarado Lara</strong></p>
   </header>
-  <div id="app"></div>
+
+  <!-- Registro de asistencia -->
+  <a class="action-card" href="https://forms.google.com" target="_blank">
+    <div class="action-icon icon-blue">📋</div>
+    <div class="action-content">
+      <div class="action-title">Registro de asistencia</div>
+      <div class="action-desc">Registra tu asistencia a la tutoría antes de iniciar</div>
+    </div>
+    <span class="action-arrow">→</span>
+  </a>
+
+  <!-- Dominios del examen -->
+  <a class="action-card green-card" href="dominios/index.html" target="_blank">
+    <div class="action-icon icon-green">📚</div>
+    <div class="action-content">
+      <div class="action-title">Dominios del examen CLF-C02</div>
+      <div class="action-desc">Conoce los 4 dominios y los temas que cubre la certificación</div>
+    </div>
+    <span class="action-arrow">→</span>
+  </a>
+
+  <div class="divider"></div>
+
+  <!-- SESIÓN 1 -->
+  <div class="section-header">
+    <span class="section-badge badge-active">Sesión 1</span>
+    <span class="section-title">Fundamentos y servicios clave AWS</span>
+    <span class="section-date">Disponible</span>
+  </div>
+  <div class="cards-grid">
+    <a class="mat-card" href="sesion1/flashcards.html" target="_blank">
+      <div class="mat-icon mi-blue">🃏</div>
+      <div class="mat-label">Teoría</div>
+      <div class="mat-name">Flashcards — Servicios AWS</div>
+      <div class="mat-desc">50 tarjetas interactivas con definiciones, casos de uso y tips del examen</div>
+      <div class="mat-status"><div class="dot dot-live"></div><span class="status-txt">Disponible</span></div>
+    </a>
+    <a class="mat-card" href="sesion1/casos-uso.html" target="_blank">
+      <div class="mat-icon mi-green">✅</div>
+      <div class="mat-label">Práctica</div>
+      <div class="mat-name">Casos de uso — CLF-C02</div>
+      <div class="mat-desc">10 escenarios reales con retroalimentación automática por pregunta</div>
+      <div class="mat-status"><div class="dot dot-live"></div><span class="status-txt">Disponible</span></div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SESIÓN 2 -->
+  <div class="section-header">
+    <span class="section-badge badge-soon">Sesión 2</span>
+    <span class="section-title">Redes, infraestructura global y alta disponibilidad</span>
+    <span class="section-date">Próximamente</span>
+  </div>
+  <div class="cards-grid">
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">🃏</div>
+      <div class="mat-label">Teoría</div>
+      <div class="mat-name">Flashcards — Redes AWS</div>
+      <div class="mat-desc">VPC, Route 53, CloudFront, ELB, VPN, Direct Connect</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">✅</div>
+      <div class="mat-label">Práctica</div>
+      <div class="mat-name">Casos de uso — Redes</div>
+      <div class="mat-desc">Escenarios de conectividad, failover y alta disponibilidad</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SESIÓN 3 -->
+  <div class="section-header">
+    <span class="section-badge badge-soon">Sesión 3</span>
+    <span class="section-title">Seguridad: IAM y responsabilidad compartida</span>
+    <span class="section-date">Próximamente</span>
+  </div>
+  <div class="cards-grid">
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">🃏</div>
+      <div class="mat-label">Teoría</div>
+      <div class="mat-name">Flashcards — IAM y seguridad</div>
+      <div class="mat-desc">Usuarios, grupos, roles, políticas, MFA y least privilege</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">✅</div>
+      <div class="mat-label">Práctica</div>
+      <div class="mat-name">Casos de uso — IAM</div>
+      <div class="mat-desc">Escenarios de control de acceso y modelo de responsabilidad compartida</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SESIÓN 4 -->
+  <div class="section-header">
+    <span class="section-badge badge-soon">Sesión 4</span>
+    <span class="section-title">Seguridad: servicios de protección y cumplimiento</span>
+    <span class="section-date">Próximamente</span>
+  </div>
+  <div class="cards-grid">
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">🃏</div>
+      <div class="mat-label">Teoría</div>
+      <div class="mat-name">Flashcards — Protección y auditoría</div>
+      <div class="mat-desc">Shield, WAF, GuardDuty, Inspector, Macie, Config, CloudTrail</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">✅</div>
+      <div class="mat-label">Práctica</div>
+      <div class="mat-name">Casos de uso — Cumplimiento</div>
+      <div class="mat-desc">Escenarios de detección de amenazas y auditoría</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SESIÓN 5 -->
+  <div class="section-header">
+    <span class="section-badge badge-soon">Sesión 5</span>
+    <span class="section-title">Conceptos de la nube y Well-Architected Framework</span>
+    <span class="section-date">Próximamente</span>
+  </div>
+  <div class="cards-grid">
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">🃏</div>
+      <div class="mat-label">Teoría</div>
+      <div class="mat-name">Flashcards — Conceptos cloud</div>
+      <div class="mat-desc">6 pilares WAF, CAF, 7 Rs de migración, CAPEX vs OPEX</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">✅</div>
+      <div class="mat-label">Práctica</div>
+      <div class="mat-name">Casos de uso — Arquitectura</div>
+      <div class="mat-desc">Escenarios de diseño cloud y principios de buena arquitectura</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SESIÓN 6 -->
+  <div class="section-header">
+    <span class="section-badge badge-soon">Sesión 6</span>
+    <span class="section-title">Facturación, precios y planes de soporte</span>
+    <span class="section-date">Próximamente</span>
+  </div>
+  <div class="cards-grid">
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">🃏</div>
+      <div class="mat-label">Teoría</div>
+      <div class="mat-name">Flashcards — Costos y soporte</div>
+      <div class="mat-desc">On-Demand, Reserved, Spot, Cost Explorer, Budgets, planes de soporte</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">✅</div>
+      <div class="mat-label">Práctica</div>
+      <div class="mat-name">Casos de uso — Costos</div>
+      <div class="mat-desc">Escenarios de optimización de gasto y modelos de precios</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SESIONES 7 y 8 -->
+  <div class="section-header">
+    <span class="section-badge badge-soon">Sesiones 7 y 8</span>
+    <span class="section-title">Simulacros y preparación final</span>
+    <span class="section-date">Próximamente</span>
+  </div>
+  <div class="cards-grid">
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">📝</div>
+      <div class="mat-label">Simulacro</div>
+      <div class="mat-name">Examen de práctica 1</div>
+      <div class="mat-desc">65 preguntas · todos los dominios · retroalimentación por pregunta</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-gray">🎯</div>
+      <div class="mat-label">Simulacro</div>
+      <div class="mat-name">Examen de práctica 2</div>
+      <div class="mat-desc">Simulacro final · condiciones reales del examen CLF-C02</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RECURSOS -->
+  <div class="section-header">
+    <span class="section-badge badge-recurso">Recursos</span>
+    <span class="section-title">Material de referencia permanente</span>
+  </div>
+  <div class="cards-grid">
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-purple">❓</div>
+      <div class="mat-label">Formulario</div>
+      <div class="mat-name">Envía tu duda</div>
+      <div class="mat-desc">¿Tienes una duda sobre algún tema de la certificación? Escríbela aquí</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+    <div class="mat-card disabled">
+      <div class="mat-icon mi-amber">🔗</div>
+      <div class="mat-label">Recursos</div>
+      <div class="mat-name">Material oficial AWS</div>
+      <div class="mat-desc">Links a documentación oficial y recursos de AWS Skill Builder</div>
+      <div class="mat-status"><div class="dot dot-soon"></div><span class="status-txt">Próximamente</span></div>
+    </div>
+  </div>
+
+  <footer>INFOTEC · Tutoría AWS Cloud Practitioner · 2025</footer>
+
 </div>
-
-<script>
-const CARDS = [
-  {
-    cat:"Monitoreo",
-    service:"Amazon CloudWatch",
-    tipo:"Métricas · alarmas · logs",
-    def:"Monitoreo de métricas, logs y alarmas para recursos AWS (CPU, red, disco, métricas personalizadas).",
-    uso:"Crear alarmas de CPU al 80%, dashboards de rendimiento, detectar errores en logs.",
-    tip:"CloudWatch = <strong>MÉTRICAS y alarmas</strong>. No confundir: CloudWatch mide el rendimiento → CloudTrail registra quién hizo qué."
-  },
-  {
-    cat:"Seguridad",
-    service:"AWS Shield",
-    tipo:"Protección DDoS",
-    def:"Protección administrada contra ataques DDoS. Shield Standard es gratuito y automático; Shield Advanced ofrece protección avanzada con soporte 24/7.",
-    uso:"Proteger aplicaciones web y APIs contra ataques volumétricos de denegación de servicio.",
-    tip:"Shield = <strong>anti-DDoS</strong>. Standard es automático y gratis para todos los clientes AWS."
-  },
-  {
-    cat:"Seguridad",
-    service:"AWS IAM",
-    tipo:"Identidad y acceso",
-    def:"Gestiona quién puede hacer qué en AWS: usuarios, grupos, roles y políticas de permisos.",
-    uso:"Controlar acceso a servicios AWS, crear roles para EC2, aplicar el principio de mínimo privilegio.",
-    tip:"IAM = <strong>control de acceso</strong>. Usuarios, grupos (sin anidar), roles (para servicios y apps)."
-  },
-  {
-    cat:"Migración",
-    service:"AWS DMS",
-    tipo:"Migración de bases de datos",
-    def:"Database Migration Service: migra bases de datos hacia AWS con mínimo tiempo de inactividad, soportando migraciones homogéneas y heterogéneas.",
-    uso:"Migrar Oracle a Aurora, SQL Server a RDS, bases de datos on-premises a la nube.",
-    tip:"DMS = <strong>migrar bases de datos</strong>. Application Migration Service = migrar servidores completos."
-  },
-  {
-    cat:"Redes",
-    service:"Amazon Route 53",
-    tipo:"DNS · failover automático",
-    def:"Servicio DNS escalable con health checks, failover automático y múltiples políticas de enrutamiento.",
-    uso:"Gestionar dominios, redirigir tráfico si un servidor falla, enrutamiento por latencia.",
-    tip:"Route 53 = <strong>DNS + failover</strong>. Si la pregunta dice 'redirigir automáticamente si falla' → Route 53."
-  },
-  {
-    cat:"Gobernanza",
-    service:"AWS Config",
-    tipo:"Historial de configuración",
-    def:"Rastrea cambios en la configuración de recursos AWS y evalúa su cumplimiento contra reglas definidas.",
-    uso:"Ver el historial de configuraciones, detectar recursos no conformes, auditoría de cambios.",
-    tip:"Config = <strong>HISTORIAL de configuración</strong>. CloudTrail = quién hizo el cambio. Config = cómo quedó configurado."
-  },
-  {
-    cat:"Monitoreo",
-    service:"AWS CloudTrail",
-    tipo:"Auditoría · API logging",
-    def:"Registra todas las llamadas a la API y actividades en la consola AWS: quién hizo qué, cuándo y desde dónde.",
-    uso:"Auditoría de seguridad, investigar cambios no autorizados, cumplimiento regulatorio.",
-    tip:"CloudTrail = <strong>AUDITORÍA</strong>. Si la pregunta dice '¿quién borró el bucket?' o 'actividad API' → CloudTrail."
-  },
-  {
-    cat:"Seguridad",
-    service:"AWS IAM — Mejores prácticas",
-    tipo:"Buenas prácticas de IAM",
-    def:"Las mejores prácticas de IAM incluyen: rotar credenciales periódicamente, habilitar MFA, no usar la cuenta root para tareas diarias y aplicar el principio de mínimo privilegio.",
-    uso:"Proteger la cuenta AWS contra accesos no autorizados y reducir el riesgo ante credenciales comprometidas.",
-    tip:"MFA = <strong>capa extra de seguridad</strong>. Rotar credenciales = reducir riesgo si son robadas. Nunca usar root para tareas cotidianas."
-  },
-  {
-    cat:"Almacenamiento",
-    service:"Amazon S3 Versioning",
-    tipo:"Control de versiones de objetos",
-    def:"S3 Versioning mantiene múltiples versiones de cada objeto, permitiendo recuperar versiones anteriores si se sobrescribe o elimina accidentalmente.",
-    uso:"Proteger datos críticos contra borrados o sobrescrituras accidentales, cumplimiento de retención.",
-    tip:"Versioning = <strong>recuperar versiones anteriores</strong> de objetos S3. Diferente a Lifecycle (gestión del ciclo de vida)."
-  },
-  {
-    cat:"Conceptos",
-    service:"Alta Disponibilidad (HA)",
-    tipo:"Concepto clave de arquitectura",
-    def:"Alta disponibilidad significa que el sistema continúa operando incluso si uno o más componentes fallan, mediante redundancia y diseño tolerante a fallos.",
-    uso:"Desplegar en múltiples Zonas de Disponibilidad (Multi-AZ), usar Auto Scaling y ELB para eliminar puntos únicos de fallo.",
-    tip:"HA = <strong>el sistema sigue funcionando aunque algo falle</strong>. No confundir con soporte 24/7 ni con pago por uso."
-  },
-];
-
-let idx = 0, flipped = false;
-
-function pct(){ return Math.round((idx / CARDS.length) * 100); }
-
-function render(){
-  const app = document.getElementById('app');
-  if(idx >= CARDS.length){ renderEnd(); return; }
-  const c = CARDS[idx];
-  app.innerHTML = `
-    <div class="prog-wrap">
-      <div class="prog-header"><span>Progreso</span><span>${idx} de ${CARDS.length} tarjetas vistas · ${pct()}%</span></div>
-      <div class="prog-track"><div class="prog-fill" style="width:${pct()}%"></div></div>
-    </div>
-    <div class="card-stage" onclick="flipCard()">
-      <div class="card-3d ${flipped ? 'flipped' : ''}" >
-        <div class="card-face card-front">
-          <span class="card-cat-badge">${c.cat}</span>
-          <div class="card-service-name">${c.service}</div>
-          <div class="card-tipo">${c.tipo}</div>
-          <div class="card-tap-hint">
-            <div class="tap-icon">↩</div>
-            Toca para ver la definición
-          </div>
-        </div>
-        <div class="card-face card-back">
-          <div class="back-service-label">${c.service}</div>
-          <div class="back-section">
-            <div class="back-section-label">¿Qué es?</div>
-            <div class="back-section-val">${c.def}</div>
-          </div>
-          <div class="back-section">
-            <div class="back-section-label">Casos de uso</div>
-            <div class="back-section-val">${c.uso}</div>
-          </div>
-          <div class="back-tip">💡 ${c.tip}</div>
-        </div>
-      </div>
-    </div>
-    <div class="nav-row">
-      <button class="nav-btn" onclick="prev()" ${idx===0?'disabled':''}>← Anterior</button>
-      <span class="nav-counter">${idx+1} / ${CARDS.length}</span>
-      <button class="nav-btn" onclick="next()">
-        ${idx === CARDS.length - 1 ? 'Finalizar ✓' : 'Siguiente →'}
-      </button>
-    </div>`;
-}
-
-function renderEnd(){
-  document.getElementById('app').innerHTML = `
-    <div class="end-screen">
-      <div class="card-cat-badge" style="display:inline-flex;margin-bottom:16px">Completado</div>
-      <div class="end-score">✓</div>
-      <div class="end-label">Has revisado las ${CARDS.length} tarjetas</div>
-      <div class="end-msg">¡Buen trabajo! Repite el mazo cuantas veces necesites hasta sentirte segura con cada servicio AWS.</div>
-      <button class="restart-btn" onclick="restart()">↩ Volver al inicio</button>
-    </div>`;
-}
-
-function flipCard(){ if(!flipped){ flipped = true; render(); } }
-function prev(){ if(idx > 0){ idx--; flipped = false; render(); } }
-function next(){ idx++; flipped = false; render(); }
-function restart(){ idx = 0; flipped = false; render(); }
-
-render();
-</script>
 </body>
 </html>
