@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Asistencia — Tutoría INFOTEC</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f7fa;
+  --surface:#ffffff;
+  --surface2:#eef1f6;
+  --border:rgba(0,0,0,0.09);
+  --border2:rgba(0,0,0,0.16);
+  --text:#111827;
+  --text2:#4b5563;
+  --text3:#9ca3af;
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --green:#059669;
+  --green-bg:#d1fae5;
+  --green-border:#6ee7b7;
+  --red:#dc2626;
+  --red-bg:#fee2e2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+.wrapper{max-width:600px;margin:0 auto;padding:32px 16px 64px}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text3);text-decoration:none;margin-bottom:24px;transition:color .15s}
+.back-link:hover{color:var(--accent)}
+
+header{margin-bottom:28px}
+.tag{display:inline-block;background:var(--surface);border:1px solid var(--border2);border-radius:30px;padding:6px 20px;font-size:12px;font-weight:500;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+h1{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,32px);font-weight:700;letter-spacing:-.02em;line-height:1.15;margin-bottom:6px}
+.header-desc{font-size:13px;color:var(--text2)}
+.autor{font-size:12px;color:var(--text3);font-style:italic;margin-top:3px}
+.autor strong{font-style:normal;color:var(--text2);font-weight:500}
+
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 2px 16px rgba(0,0,0,.05)}
+
+.field-group{margin-bottom:20px}
+label{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+label .req{color:var(--accent);margin-left:2px}
+
+input[type="text"],
+input[type="email"],
+input[type="date"]{
+  width:100%;border:1.5px solid var(--border2);border-radius:10px;
+  padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;
+  color:var(--text);background:var(--surface);outline:none;transition:border-color .2s;
+}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+input::placeholder{color:var(--text3)}
+
+.radio-group{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.radio-item{display:flex;align-items:center;gap:12px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s}
+.radio-item:hover{border-color:var(--accent);background:#eff6ff}
+.radio-item.selected{border-color:var(--accent);background:#eff6ff}
+.radio-item input[type="radio"]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.radio-label{font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
+.radio-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+.divider{height:1px;background:var(--border);margin:22px 0}
+
+.submit-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:500;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s;margin-top:24px;letter-spacing:.01em}
+.submit-btn:hover:not(:disabled){opacity:.88}
+.submit-btn:disabled{opacity:.4;cursor:default}
+
+.loading{display:none;text-align:center;padding:14px;color:var(--text3);font-size:13px;margin-top:12px}
+.loading.show{display:block}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.msg{display:none;border-radius:14px;padding:20px;font-size:14px;line-height:1.65;margin-top:16px;text-align:center}
+.msg.show{display:block}
+.msg-ok{background:var(--green-bg);border:1px solid var(--green-border);color:#065f46}
+.msg-error{background:var(--red-bg);border:1px solid #fca5a5;color:#991b1b}
+.msg-icon{font-size:28px;display:block;margin-bottom:8px}
+.msg-btn{display:inline-block;margin-top:14px;background:#065f46;color:#fff;border:none;border-radius:10px;padding:10px 22px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none}
+.msg-btn:hover{opacity:.88}
+
+footer{text-align:center;margin-top:28px;font-size:12px;color:var(--text3)}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <a class="back-link" href="../index.html">← Regresar al índice</a>
+
+  <header>
+    <div class="tag">Tutoría INFOTEC · CLF-C02</div>
+    <h1>Registro de asistencia</h1>
+    <p class="header-desc">Completa el formulario antes de iniciar la sesión</p>
+    <p class="autor">Material elaborado por la tutora: <strong>Iliana Lizbeth Alvarado Lara</strong></p>
+  </header>
+
+  <div class="form-card">
+
+    <form id="form">
+
+      <div class="field-group">
+        <label for="nombre">Nombre completo <span class="req">*</span></label>
+        <input type="text" id="nombre" placeholder="Escribe tu nombre completo" required>
+      </div>
+
+      <div class="field-group">
+        <label for="correo">Correo electrónico <span class="req">*</span></label>
+        <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required>
+      </div>
+
+      <div class="field-group">
+        <label for="matricula">Matrícula o número de estudiante <span class="req">*</span></label>
+        <input type="text" id="matricula" placeholder="Ej. 2024001234" required>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-group">
+        <label>Sesión a la que asistes <span class="req">*</span></label>
+        <div class="radio-group" id="sesion-group">
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 1 · Fundamentos y servicios clave AWS">
+            <div><div class="radio-label">Sesión 1</div><div class="radio-sub">Fundamentos y servicios clave AWS</div></div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 2 · Redes e infraestructura global">
+            <div><div class="radio-label">Sesión 2</div><div class="radio-sub">Redes e infraestructura global</div></div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 3 · Seguridad: IAM y responsabilidad compartida">
+            <div><div class="radio-label">Sesión 3</div><div class="radio-sub">Seguridad: IAM y responsabilidad compartida</div></div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 4 · Seguridad: protección y cumplimiento">
+            <div><div class="radio-label">Sesión 4</div><div class="radio-sub">Seguridad: protección y cumplimiento</div></div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 5 · Conceptos de la nube y Well-Architected">
+            <div><div class="radio-label">Sesión 5</div><div class="radio-sub">Conceptos de la nube y Well-Architected Framework</div></div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 6 · Facturación, precios y soporte">
+            <div><div class="radio-label">Sesión 6</div><div class="radio-sub">Facturación, precios y soporte</div></div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 7 · Simulacro 1">
+            <div><div class="radio-label">Sesión 7</div><div class="radio-sub">Simulacro 1 — repaso de brechas</div></div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'sesion')">
+            <input type="radio" name="sesion" value="Sesión 8 · Simulacro final">
+            <div><div class="radio-label">Sesión 8</div><div class="radio-sub">Simulacro final — preparación para el examen</div></div>
+          </label>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-group">
+        <label for="fecha">Fecha de la sesión <span class="req">*</span></label>
+        <input type="date" id="fecha" required>
+      </div>
+
+      <div class="field-group">
+        <label>¿Es tu primera sesión? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item" onclick="pick(this,'primera')">
+            <input type="radio" name="primera" value="Sí, es mi primera sesión">
+            <div class="radio-label">Sí, es mi primera sesión</div>
+          </label>
+          <label class="radio-item" onclick="pick(this,'primera')">
+            <input type="radio" name="primera" value="No, ya he asistido anteriormente">
+            <div class="radio-label">No, ya he asistido anteriormente</div>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        Registrar asistencia →
+      </button>
+
+    </form>
+
+    <div class="loading" id="loading">
+      <span class="spinner"></span> Registrando tu asistencia...
+    </div>
+
+    <div class="msg msg-ok" id="msg-ok">
+      <span class="msg-icon">✅</span>
+      <strong>¡Asistencia registrada correctamente!</strong><br>
+      Tu registro fue guardado. Ya puedes acceder al material de la sesión.
+      <br>
+      <a class="msg-btn" href="../index.html">Ir al material →</a>
+    </div>
+
+    <div class="msg msg-error" id="msg-error">
+      <span class="msg-icon">❌</span>
+      <strong>Ocurrió un error al enviar</strong><br>
+      Verifica tu conexión a internet e intenta nuevamente.
+      <br>
+      <button class="msg-btn" onclick="resetForm()" style="background:#991b1b">Intentar de nuevo</button>
+    </div>
+
+  </div>
+
+  <footer>INFOTEC · Tutoría AWS Cloud Practitioner · 2025</footer>
+
+</div>
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUOyhs2CnuI7znZUGh0TmTr6Y7hSogdl0kOdUsVVXv4KMJeyVo3rOksSs2tXILocvE4A/exec';
+
+// Fecha de hoy por defecto
+document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+
+// Resaltar opción seleccionada
+function pick(label, name){
+  document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+    r.closest('.radio-item').classList.remove('selected');
+  });
+  label.classList.add('selected');
+}
+
+// Validar que todos los radios estén seleccionados
+function getRadio(name){
+  const sel = document.querySelector(`input[name="${name}"]:checked`);
+  return sel ? sel.value : null;
+}
+
+// Submit
+document.getElementById('form').addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const nombre   = document.getElementById('nombre').value.trim();
+  const correo   = document.getElementById('correo').value.trim();
+  const matricula= document.getElementById('matricula').value.trim();
+  const fecha    = document.getElementById('fecha').value;
+  const sesion   = getRadio('sesion');
+  const primera  = getRadio('primera');
+
+  if(!nombre || !correo || !matricula || !fecha || !sesion || !primera){
+    alert('Por favor completa todos los campos antes de enviar.');
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  const loading = document.getElementById('loading');
+
+  btn.disabled = true;
+  document.getElementById('form').style.opacity = '.4';
+  loading.classList.add('show');
+
+  const payload = { nombre, correo, matricula, sesion, primera_sesion: primera };
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    loading.classList.remove('show');
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('msg-ok').classList.add('show');
+
+  } catch(err){
+    loading.classList.remove('show');
+    document.getElementById('form').style.opacity = '1';
+    btn.disabled = false;
+    document.getElementById('msg-error').classList.add('show');
+  }
+});
+
+function resetForm(){
+  document.getElementById('msg-error').classList.remove('show');
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('form').style.opacity = '1';
+}
+</script>
+</body>
+</html>
